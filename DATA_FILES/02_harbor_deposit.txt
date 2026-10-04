@@ -1,0 +1,27 @@
+SYNTHETIC TEST DATA ONLY. All products, issuers and rules are fictional. Not real Indian law.
+
+Title: Harbor Fixed Deposit
+Document ID: SYN_HARBOR_01
+Issuer: Demo Harbor Deposit Office
+Version: 1
+Effective from: 2026-01-01
+Effective to: not specified
+Scope: Only the named fictional products. Dates and issuers are part of this test fixture.
+
+H01: Harbor Fixed Deposit accepts resident individuals aged 18 or older.
+
+H02: Harbor Fixed Deposit requires a minimum principal of INR 10,000.
+
+H03: Harbor Fixed Deposit has a 12-month term.
+
+H04: Harbor Fixed Deposit earns 6% simple annual interest, paid at maturity.
+
+H05: Harbor Fixed Deposit allows premature closure only after 90 completed days.
+
+H06: Harbor premature closure reduces the annual interest rate by 0.5 percentage points for the elapsed term.
+
+H07: Harbor Fixed Deposit joint accounts may have at most two adult resident holders.
+
+H08: Harbor Fixed Deposit principal cannot be topped up after the deposit is opened.
+
+H09: This Harbor notice does not state whether any deposit insurance applies.

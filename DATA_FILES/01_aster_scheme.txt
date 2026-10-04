@@ -1,0 +1,29 @@
+SYNTHETIC TEST DATA ONLY. All products, issuers and rules are fictional. Not real Indian law.
+
+Title: Aster Growth Scheme
+Document ID: SYN_ASTER_01
+Issuer: Demo Aster Scheme Office
+Version: 1
+Effective from: 2026-01-01
+Effective to: not specified
+Scope: Only the named fictional products. Dates and issuers are part of this test fixture.
+
+A01: Aster Growth Scheme accepts resident individuals aged 18 or older.
+
+A02: Non-resident individuals cannot invest in Aster Growth Scheme.
+
+A03: Aster Growth Scheme requires an initial investment of at least INR 5,000.
+
+A04: Each additional investment in Aster Growth Scheme must be at least INR 1,000.
+
+A05: Every Aster Growth Scheme investment has its own 36-month lock-in from its investment date.
+
+A06: Aster Growth Scheme permits early withdrawal only for a specified medical emergency.
+
+A07: This Aster notice does not define qualifying medical emergencies or list required medical documents.
+
+A08: Aster Growth Scheme pays an approved withdrawal within 5 business days after approval.
+
+A09: Aster Growth Scheme returns are market-linked; neither the return nor principal is guaranteed.
+
+A10: Aster Growth Scheme investors may register one nominee.

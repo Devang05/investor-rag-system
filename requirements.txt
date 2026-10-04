@@ -1,0 +1,5 @@
+openai
+langchain-text-splitters
+langchain-huggingface
+langchain-chroma
+sentence-transformers

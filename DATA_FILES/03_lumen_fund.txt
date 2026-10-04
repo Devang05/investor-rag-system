@@ -1,0 +1,29 @@
+SYNTHETIC TEST DATA ONLY. All products, issuers and rules are fictional. Not real Indian law.
+
+Title: Lumen Liquid Fund
+Document ID: SYN_LUMEN_01
+Issuer: Demo Lumen Fund Office
+Version: 1
+Effective from: 2026-01-01
+Effective to: not specified
+Scope: Only the named fictional products. Dates and issuers are part of this test fixture.
+
+L01: Lumen Liquid Fund requires an initial investment of at least INR 2,000.
+
+L02: Lumen Liquid Fund has no lock-in; investors may request redemption on any business day.
+
+L03: Lumen Liquid Fund pays redemption proceeds within 2 business days after accepting the request.
+
+L04: Lumen Liquid Fund must hold at least 80% of portfolio value in debt instruments.
+
+L05: Lumen Liquid Fund may hold at most 20% of portfolio value in cash.
+
+L06: Lumen Liquid Fund may hold only debt instruments and cash.
+
+L07: Lumen Liquid Fund debt instruments must each have a remaining maturity of at most 60 days.
+
+L08: Lumen Liquid Fund cannot borrow money to make investments.
+
+L09: Lumen Liquid Fund does not guarantee returns or protection of principal.
+
+L10: Lumen Liquid Fund pays no regular monthly income; gains or losses arise when units are redeemed.

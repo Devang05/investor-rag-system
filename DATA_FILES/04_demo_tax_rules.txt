@@ -1,0 +1,31 @@
+SYNTHETIC TEST DATA ONLY. All products, issuers and rules are fictional. Not real Indian law.
+
+Title: Synthetic product tax rules
+Document ID: SYN_TAX_01
+Issuer: Demo Investment Tax Office
+Version: 1
+Effective from: 2026-01-01
+Effective to: not specified
+Scope: Only the named fictional products. Dates and issuers are part of this test fixture.
+
+T01: Aster Growth Scheme taxes positive gains at 8% for investments held at least 36 months.
+
+T02: Aster Growth Scheme taxes positive gains at 12% on permitted withdrawals before 36 months.
+
+T03: Aster Growth Scheme tax applies to gains only, not the original invested amount.
+
+T04: Harbor Fixed Deposit withholds 10% of total annual interest when that interest exceeds INR 4,000.
+
+T05: Harbor Fixed Deposit withholds no tax when total annual interest is INR 4,000 or less.
+
+T06: Harbor Fixed Deposit withholding applies to all annual interest, not just the amount above INR 4,000.
+
+T07: Harbor Fixed Deposit withholding is a deduction at payment; this notice does not specify final tax liability.
+
+T08: Lumen Liquid Fund taxes positive redemption gains at 5%, regardless of holding period.
+
+T09: Lumen Liquid Fund tax applies to gains only, not the original invested amount.
+
+T10: Aster and Lumen redemptions with zero or negative gains incur zero tax under these demo rules.
+
+T11: This demo tax notice does not specify loss offsets, refunds, filing procedures, or surcharge rules.
