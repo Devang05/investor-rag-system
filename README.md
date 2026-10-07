@@ -20,8 +20,6 @@ The included data is **synthetic and for testing only**. Its products and rules 
 | --- | --- |
 | `update_db.py` | Load text files, create chunks, and update Chroma |
 | `chat.py` | Retrieve evidence and answer questions in a terminal loop |
-| `evaluate.py` | Run the test questions and check answers, citations and retrieval |
-| `eval_set.json` | Test questions with expected facts and source files |
 | `DATA_FILES/` | Source text documents |
 | `requirements.txt` | Python dependencies |
 | `.gitignore` | Excludes secrets, virtual environments, and generated database files |
@@ -95,17 +93,3 @@ python chat.py --debug
 ```
 
 Type `exit` or `quit` to stop. The database is always stored in `chroma_db/` next to the scripts. Index documents before starting the chat.
-
-## Testing
-
-`eval_set.json` holds 14 test cases: direct questions, follow-up conversations, and questions the documents cannot answer. `evaluate.py` runs each one through the same pipeline as `chat.py` and checks that the expected source file was retrieved, the answer contains the expected facts, citations use only supplied labels, and unanswerable questions are declined.
-
-```bash
-python evaluate.py              # run all cases
-python evaluate.py --verbose    # also print every answer
-python evaluate.py --case aster_min_initial
-```
-
-Index all four documents first. Each run makes real LLM calls through Groq (about 17 for the full set).
-
-Known limitation: questions that compare two products can miss one product's passage, because both share the top 5 search results (`compare_min_aster_harbor` currently fails for this reason).
