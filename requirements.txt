@@ -1,5 +1,5 @@
-openai
-langchain-text-splitters
-langchain-huggingface
-langchain-chroma
-sentence-transformers
+openai==3.19.2
+langchain-text-splitters==1.1.2
+langchain-huggingface==1.2.2
+langchain-chroma==1.1.0
+sentence-transformers==6.1.0

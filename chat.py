@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import argparse
 from openai import OpenAI, APIError
@@ -88,6 +89,14 @@ def rewrite_question(client, question, history):
 
     return rewritten or question
 
+# the model sometimes cites like 【1†A03】 despite the prompt -> normalise to [1]
+def clean_answer(answer):
+    answer = re.sub(r"\u3010\s*(\d+)[^\u3011]*\u3011", r"[\1]", answer)
+    answer = re.sub(r"\[(\d+)\u2020[^\]]*\]", r"[\1]", answer)
+
+    # narrow / non-breaking spaces -> normal spaces
+    return answer.replace("\u202f", " ").replace("\u00a0", " ")
+
 def generate_answer(client, question, context, history):
     response = client.chat.completions.create(
         model = "openai/gpt-oss-120b",
@@ -95,22 +104,42 @@ def generate_answer(client, question, context, history):
         temperature = 0
     )
 
-    return response.choices[0].message.content
+    return clean_answer(response.choices[0].message.content or "")
+
+def make_client():
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        sys.exit("GROQ_API_KEY is not set. Set it in your environment before starting the chat.")
+
+    return OpenAI(
+        api_key = api_key,
+        base_url = "https://api.groq.com/openai/v1"
+    )
+
+# one full question -> rewrite, retrieve, answer
+def ask(client, db, question, history):
+    search_query = rewrite_question(client, question, history)
+    results = retriever(db, search_query)
+    context = built_context(results)
+    answer = generate_answer(client, search_query, context, history)
+
+    return search_query, results, context, answer
+
+# keeping only the last few turns as memory
+def add_to_history(history, question, answer):
+    history = history + [
+        {"role":"user","content":question},
+        {"role":"assistant","content":answer or ""}
+    ]
+
+    return history[-2 * MAX_HISTORY_TURNS:]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Ask questions about the indexed investor documents.")
     parser.add_argument("--debug", action="store_true", help="print the rewritten question and retrieved evidence")
     args = parser.parse_args()
 
-    api_key = os.getenv("GROQ_API_KEY")
-    if not api_key:
-        sys.exit("GROQ_API_KEY is not set. Set it in your environment before starting the chat.")
-
-    client = OpenAI(
-        api_key = api_key,
-        base_url = "https://api.groq.com/openai/v1"
-    )
-
+    client = make_client()
     db = get_vector_store()
 
     if not db.get(limit=1)["ids"]:
@@ -128,22 +157,15 @@ if __name__ == "__main__":
             continue
 
         try:
-            search_query = rewrite_question(client, question, history)
-            results = retriever(db, search_query)
-            context = built_context(results)
-
-            if args.debug:
-                print("\nSearch query:", search_query)
-                print("\nRetrieved evidence:\n", context)
-
-            answer = generate_answer(client, search_query, context, history)
+            search_query, results, context, answer = ask(client, db, question, history)
         except APIError as e:
             print(f"\nAssistant: Sorry, the request to the LLM failed ({e}). Please try again.")
             continue
 
+        if args.debug:
+            print("\nSearch query:", search_query)
+            print("\nRetrieved evidence:\n", context)
+
         print(f"\nAssistant: {answer}")
 
-        # keeping only the last few turns as memory
-        history.append({"role":"user","content":question})
-        history.append({"role":"assistant","content":answer or ""})
-        history = history[-2 * MAX_HISTORY_TURNS:]
+        history = add_to_history(history, question, answer)

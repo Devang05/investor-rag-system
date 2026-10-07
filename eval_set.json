@@ -1,0 +1,95 @@
+[
+  {
+    "id": "aster_min_initial",
+    "turns": ["What is the minimum initial investment in Aster Growth Scheme?"],
+    "expected_sources": ["01_aster_scheme.txt"],
+    "must_include": [["5,000", "5000"]]
+  },
+  {
+    "id": "harbor_interest_rate",
+    "turns": ["What interest rate does Harbor Fixed Deposit pay?"],
+    "expected_sources": ["02_harbor_deposit.txt"],
+    "must_include": [["6%", "6 %", "6 percent"]]
+  },
+  {
+    "id": "lumen_payout_days",
+    "turns": ["How quickly does Lumen Liquid Fund pay redemption proceeds?"],
+    "expected_sources": ["03_lumen_fund.txt"],
+    "must_include": [["2 business", "two business"]]
+  },
+  {
+    "id": "aster_non_resident",
+    "turns": ["Can a non-resident individual invest in Aster Growth Scheme?"],
+    "expected_sources": ["01_aster_scheme.txt"],
+    "must_include": [["cannot", "can't", "not eligible", "not allowed", "not permitted"]]
+  },
+  {
+    "id": "harbor_withholding_calc",
+    "turns": ["If my Harbor Fixed Deposit earns INR 5,000 interest in a year, how much tax is withheld?"],
+    "expected_sources": ["04_demo_tax_rules.txt"],
+    "must_include": [["500"]]
+  },
+  {
+    "id": "lumen_allocation_check",
+    "turns": ["Does a Lumen Liquid Fund portfolio with 75% debt and 25% cash meet its allocation rules?"],
+    "expected_sources": ["03_lumen_fund.txt"],
+    "must_include": [["80%"], ["20%"]]
+  },
+  {
+    "id": "compare_min_aster_harbor",
+    "turns": ["Compare the minimum initial amounts for Aster Growth Scheme and Harbor Fixed Deposit."],
+    "expected_sources": ["01_aster_scheme.txt", "02_harbor_deposit.txt"],
+    "must_include": [["5,000", "5000"], ["10,000", "10000"]]
+  },
+  {
+    "id": "aster_early_withdrawal_tax",
+    "turns": ["What tax rate applies to gains on an Aster Growth Scheme withdrawal before 36 months?"],
+    "expected_sources": ["04_demo_tax_rules.txt"],
+    "must_include": [["12%"]]
+  },
+  {
+    "id": "followup_aster_early_withdrawal",
+    "turns": [
+      "What is the lock-in period for Aster Growth Scheme?",
+      "Can I withdraw early from it?"
+    ],
+    "expected_sources": ["01_aster_scheme.txt"],
+    "must_include": [["medical"]]
+  },
+  {
+    "id": "followup_lumen_min",
+    "turns": [
+      "What is the minimum principal for Harbor Fixed Deposit?",
+      "And what about Lumen Liquid Fund?"
+    ],
+    "expected_sources": ["03_lumen_fund.txt"],
+    "must_include": [["2,000", "2000"]]
+  },
+  {
+    "id": "followup_lumen_tax_holding",
+    "turns": [
+      "How are Lumen Liquid Fund gains taxed?",
+      "Does the holding period change that?"
+    ],
+    "expected_sources": ["04_demo_tax_rules.txt"],
+    "must_include": [["5%"]]
+  },
+  {
+    "id": "unanswerable_aster_medical_docs",
+    "turns": ["Which medical documents do I need for an early withdrawal from Aster Growth Scheme?"],
+    "expected_sources": ["01_aster_scheme.txt"],
+    "expect_insufficient": true
+  },
+  {
+    "id": "unanswerable_harbor_insurance",
+    "turns": ["Is a Harbor Fixed Deposit covered by deposit insurance?"],
+    "expected_sources": ["02_harbor_deposit.txt"],
+    "expect_insufficient": true
+  },
+  {
+    "id": "out_of_scope_repo_rate",
+    "turns": ["What is the current repo rate set by the Reserve Bank of India?"],
+    "expected_sources": [],
+    "expect_insufficient": true
+  }
+]
