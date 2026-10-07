@@ -1,8 +1,17 @@
 
+import argparse
 import hashlib
+from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
+
+# chroma_db is kept next to this script, regardless of the folder it is run from
+DB_DIR = Path(__file__).resolve().parent / "chroma_db"
+
+# chunk settings
+CHUNK_SIZE = 600
+CHUNK_OVERLAP = 100
 
 # Reading file with doc_id
 def load_doc(file_path,doc_id):
@@ -23,11 +32,11 @@ def load_doc(file_path,doc_id):
 
 # defining chunking/text splitter
 def make_chunks(doc):
-    
+
     #defining splitter
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size = 120,
-        chunk_overlap = 20,
+        chunk_size = CHUNK_SIZE,
+        chunk_overlap = CHUNK_OVERLAP,
         length_function = len
     )
 
@@ -40,27 +49,27 @@ def make_chunks(doc):
     return chunks
 
 #defining vector store
-def vector_store():
+def get_vector_store():
 
-    # defining embedding model 
+    # defining embedding model
     embedding_model = HuggingFaceEmbeddings(
         model_name = "sentence-transformers/all-MiniLM-L6-v2",
         model_kwargs = {"device":"cpu"}
     )
-    
-    vector_store = Chroma(
+
+    store = Chroma(
         collection_name="Documents_DB",
-        persist_directory="./chroma_db",
+        persist_directory=str(DB_DIR),
         embedding_function = embedding_model,
         collection_configuration = {"hnsw":{"space":"cosine"}}
     )
 
-    return vector_store
+    return store
 
-def update_document(vector_store,document):
+def update_document(db,document):
 
     # lsit of all chunks with same doc_id
-    existing = vector_store.get(
+    existing = db.get(
         where={"doc_id":document["metadata"]["doc_id"]}
     )
 
@@ -69,15 +78,19 @@ def update_document(vector_store,document):
     # make chunks to update db
     chunks = make_chunks(document)
 
+    # empty document -> remove its old chunks so they are no longer searchable
     if not chunks:
+        if old_ids:
+            db.delete(ids=old_ids)
+            return "Document Empty - Old Chunks Removed"
         return "Document Empty"
 
     # chunk_ids
     chunk_ids = []
     for i in range(len(chunks)):
-        # sample chunk_id -> demo_rules_1_<context_hash>_chunk 1, 2, etc.
+        # sample chunk_id -> SYN_TAX_01_<content_hash>_chunk0, chunk1, etc.
         chunk_ids.append(f"{document['metadata']['doc_id']}_{document['metadata']['content_hash']}_chunk{i}")
-    
+
     new_ids = chunk_ids
 
     # checking new_ids and old_ids is same -> unchanged
@@ -85,7 +98,7 @@ def update_document(vector_store,document):
         return "Unchanged Data Base"
 
     # adding new chunks to database
-    vector_store.add_documents(
+    db.add_documents(
         documents = chunks,
         ids = new_ids
     )
@@ -93,7 +106,7 @@ def update_document(vector_store,document):
     #removing old/obsolete chunk_ids
     obsolete_chunk_ids = set(old_ids)-set(new_ids)
     if obsolete_chunk_ids:
-        vector_store.delete(ids=list(obsolete_chunk_ids))
+        db.delete(ids=list(obsolete_chunk_ids))
 
     if old_ids:
         return "Data Base Updated"
@@ -101,6 +114,11 @@ def update_document(vector_store,document):
     return "New Document Added"
 
 if __name__ == "__main__":
-    db = vector_store()
-    document = load_doc("./DATA_FILES/04_demo_tax_rules.txt","SYN_TAX_01")
+    parser = argparse.ArgumentParser(description="Add or update a document in the vector database.")
+    parser.add_argument("file_path", help="path to the text file, e.g. DATA_FILES/04_demo_tax_rules.txt")
+    parser.add_argument("doc_id", help="stable document ID, e.g. SYN_TAX_01 (reuse it to update the same document)")
+    args = parser.parse_args()
+
+    db = get_vector_store()
+    document = load_doc(args.file_path, args.doc_id)
     print(update_document(db, document))

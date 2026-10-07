@@ -11,6 +11,8 @@ The included data is **synthetic and for testing only**. Its products and rules 
 - Adds new documents, skips embedding unchanged documents, and replaces outdated chunks.
 - Retrieves the top 5 matching chunks and supplies them as evidence to the LLM.
 - Prompts the model to cite supporting passages and acknowledge insufficient evidence.
+- Remembers the last few turns and rewrites follow-up questions ("what about Harbor?") into standalone questions before retrieval.
+- Removes a document's chunks if its file is emptied.
 
 ## Project files
 
@@ -57,7 +59,7 @@ The code reads the environment variable with `os.getenv()`. Creating a `.env` fi
 
 ## Index documents
 
-In the execution block of `update_db.py`, set the file path and a stable document ID passed to `load_doc()`. For the included test documents, use:
+Pass the file path and a stable document ID to `update_db.py`. For the included test documents, use:
 
 | File in `DATA_FILES/` | Suggested `doc_id` |
 | --- | --- |
@@ -67,10 +69,10 @@ In the execution block of `update_db.py`, set the file path and a stable documen
 | `04_demo_tax_rules.txt` | `SYN_TAX_01` |
 
 ```bash
-python update_db.py
+python update_db.py DATA_FILES/01_aster_scheme.txt SYN_ASTER_01
 ```
 
-The current script processes one selected file per run. Repeat for each document, using a different ID for each. After editing a document, run the updater with that document's **same ID** to replace its stored version.
+The script processes one file per run. Repeat for each document, using a different ID for each. After editing a document, run the updater with that document's **same ID** to replace its stored version.
 
 ## Ask questions
 
@@ -84,5 +86,11 @@ Example questions:
 - Compare the minimum initial amounts for Aster Growth Scheme and Harbor Fixed Deposit.
 - Does a Lumen Liquid Fund portfolio with 75% debt and 25% cash meet its allocation rules?
 
-Type `exit` or `quit` to stop. Run both scripts from the project folder so the relative database path resolves consistently. Index documents before starting the chat.
+Follow-up questions work too, e.g. "And what is its lock-in period?" after asking about Aster Growth Scheme. Add `--debug` to print the rewritten question and the retrieved evidence:
+
+```bash
+python chat.py --debug
+```
+
+Type `exit` or `quit` to stop. The database is always stored in `chroma_db/` next to the scripts. Index documents before starting the chat.
 

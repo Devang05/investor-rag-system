@@ -1,8 +1,0 @@
-Demo Savings Scheme
-
-Eligibility:
-Only resident individuals may open an account.
-
-Withdrawals:
-Withdrawals are permitted after three years.
-Early withdrawal is permitted for specified medical emergencies.

@@ -11,3 +11,5 @@ __pycache__/
 
 # Generated vector database
 chroma_db/
+# Personal learning files (kept local)
+learning/
